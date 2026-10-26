@@ -10,7 +10,7 @@ vi.mock('../services/productService', () => ({
 
 const sampleProducts: Product[] = [
   {
-    id: '1',
+    id: 1,
     title: 'Wireless Headphones',
     price: 40,
     description: 'Comfortable headphones',
@@ -19,7 +19,7 @@ const sampleProducts: Product[] = [
     rating: { rate: 3.8, count: 20 },
   },
   {
-    id: '2',
+    id: 2,
     title: 'Premium Headphones',
     price: 70,
     description: 'Over-ear headphones',
@@ -28,7 +28,7 @@ const sampleProducts: Product[] = [
     rating: { rate: 4.7, count: 50 },
   },
   {
-    id: '3',
+    id: 3,
     title: 'Silver Bracelet',
     price: 25,
     description: 'A simple bracelet',
@@ -51,7 +51,7 @@ describe('product store', () => {
 
     expect(
       store.groupedProducts[0].products.map((product) => product.id),
-    ).toEqual(['2', '1'])
+    ).toEqual([2, 1])
   })
 
   it('searches product titles without case sensitivity', () => {
@@ -62,7 +62,7 @@ describe('product store', () => {
 
     expect(
       store.filteredProducts.map((product) => product.id),
-    ).toEqual(['1', '2'])
+    ).toEqual([1, 2])
   })
 
   it('groups products under their categories', () => {
@@ -74,7 +74,7 @@ describe('product store', () => {
     expect(store.groupedProducts).toHaveLength(2)
     expect(store.groupedProducts[0].products.map(
       (product) => product.id,
-    )).toEqual(['2', '1'])
+    )).toEqual([2, 1])
   })
 
   it('returns no matches for an unknown search term', () => {
