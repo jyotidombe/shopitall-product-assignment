@@ -47,8 +47,13 @@ export const useProductStore = defineStore('product', () => {
   })
 
   const sortedProducts = computed(() => {
-    return [...filteredProducts.value].sort((a, b) => b.rating.rate - a.rating.rate)
-  })
+    return [...filteredProducts.value].sort((a, b) => {
+      if(b.rating.rate === a.rating.rate) {
+        return b.rating.count - a.rating.count;
+      }
+      return b.rating.rate - a.rating.rate;
+    });
+  });
 
   const groupedProducts = computed(() => {
     const productsByCategory = new Map<string, Product[]>();
