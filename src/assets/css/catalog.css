@@ -1,0 +1,41 @@
+.catalog {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 36px clamp(20px, 5vw, 72px) 72px;
+}
+
+.catalog-intro {
+  padding: 20px 0 28px;
+}
+
+.eyebrow {
+  color: var(--color-accent);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.catalog-intro h1 {
+  max-width: 700px;
+  margin: 12px 0;
+  font-size: clamp(32px, 4.5vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+
+.intro-copy {
+  max-width: 560px;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 700px) {
+  .catalog {
+    padding-top: 22px;
+  }
+
+  .catalog-intro h1 {
+    letter-spacing: -1.2px;
+  }
+}

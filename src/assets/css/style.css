@@ -1,0 +1,8 @@
+/* src/assets/css/style.css */
+
+@import "./common.css";
+@import "./catalog.css";
+@import "./search.css";
+@import "./category.css";
+@import "./product.css";
+@import "./productDetail.css";
