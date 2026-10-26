@@ -1,6 +1,6 @@
 import type { Product } from '../types/product'
 
-const PRODUCT_BASE_URL = 'https://fakestoreapi.com'
+const PRODUCT_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 async function fetchApi<T>(url: string): Promise<T> {
   let response: Response

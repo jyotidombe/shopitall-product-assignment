@@ -1,23 +1,18 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useProductStore } from '../store/productStore'
-import AppHeader from '../components/AppHeader.vue'
 import SearchBar from '../components/SearchBar.vue'
 import CategorySection from '../components/CategorySection.vue'
 
 const store = useProductStore()
 
 onMounted(() => {
-  if (!store.hasLoaded) {
-    void store.loadCatalog()
-  }
+  void store.loadCatalog()
 })
 </script>
 
 <template>
   <div class="main-layout">
-    <AppHeader />
-
     <main class="catalog">
       <section class="catalog-intro">
         <p class="eyebrow">BROWSE THE CATALOGUE</p>
@@ -28,7 +23,7 @@ onMounted(() => {
       </section>
 
       <SearchBar />
-
+      <p>{{ store.filteredProducts.length }} products found</p>
       <p
         v-if="store.isLoading"
         role="status"

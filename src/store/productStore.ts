@@ -15,7 +15,7 @@ export const useProductStore = defineStore('product', () => {
   const hasLoaded = ref(false)
 
   async function loadCatalog() {
-    if(isLoading.value) return
+    if(isLoading.value  || hasLoaded.value) return
     isLoading.value = true
     error.value = null
 
@@ -37,7 +37,7 @@ export const useProductStore = defineStore('product', () => {
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
 
   const filteredProducts = computed(() => {
-    if (!searchQuery.value) {
+    if (!normalizedSearchQuery.value) {
       return products.value
     }
 
@@ -50,14 +50,23 @@ export const useProductStore = defineStore('product', () => {
     return [...filteredProducts.value].sort((a, b) => b.rating.rate - a.rating.rate)
   })
 
-  const groupedProducts = computed(() =>
-    categories.value.map((category) => ({
-      category,
-      products: sortedProducts .value.filter(
-        (product) => product.category === category,
-      ),
-    })),
-  )
+  const groupedProducts = computed(() => {
+    const productsByCategory = new Map<string, Product[]>();
+    for(const product of sortedProducts.value) {
+      const category = product.category
+      if (!productsByCategory.has(category)) {
+        productsByCategory.set(category, []);
+      }
+      productsByCategory.get(category)?.push(product);
+    }
+
+    return categories.value
+      .map((category) => ({
+        category,
+        products: productsByCategory.get(category) || [],
+      }))
+      .filter((group) => group.products.length > 0)
+  })
 
   return {
     products,
