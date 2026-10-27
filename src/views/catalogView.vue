@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useProductStore } from '../store/productStore'
+import { onMounted, onUnmounted } from 'vue'
+import { useProductStore } from '../store/productStore.ts'
 import SearchBar from '../components/SearchBar.vue'
 import CategorySection from '../components/CategorySection.vue'
 
 const store = useProductStore()
 
 onMounted(() => {
-  void store.loadCatalog()
+  store.loadCatalog()
+})
+
+onUnmounted(() => {
+  store.cancelCatalogController()
 })
 </script>
 
@@ -23,6 +27,7 @@ onMounted(() => {
       </section>
 
       <SearchBar />
+
       <p>{{ store.filteredProducts.length }} products found</p>
       <p
         v-if="store.isLoading"

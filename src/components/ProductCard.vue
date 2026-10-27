@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import type { Product } from '../types/product'
+import { useWishlistStore } from '../store/wishlistStore'
+
+const wishlistStore = useWishlistStore()
 
 defineProps<{
   product: Product
@@ -19,6 +22,12 @@ defineProps<{
         :alt="product.title"
         loading="lazy"
       />
+
+      <button type="button" class="favorite-btn" :aria-label="wishlistStore.isWishlisted(product.id) ? 'Remove from wishlist' : 'Add to wishlist'" @click.prevent.stop="wishlistStore.toggleWishlist(product.id)">
+        <span aria-hidden="true">
+          {{ wishlistStore.isWishlisted(product.id) ? '♥' : '♡' }}
+        </span>
+      </button>
     </div>
 
     <div class="product-info">

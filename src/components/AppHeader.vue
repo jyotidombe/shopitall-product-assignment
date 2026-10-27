@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import FavoriteList from './FavoriteList.vue'
+</script>
+
 <template>
   <header class="app-header">
     <RouterLink to="/" class="brand" aria-label="ShopItAll Now">
@@ -12,5 +16,6 @@
         </div>
       </div>
     </RouterLink>
+    <FavoriteList />
   </header>
 </template>

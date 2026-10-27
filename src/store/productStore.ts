@@ -14,24 +14,43 @@ export const useProductStore = defineStore('product', () => {
   const error = ref<string | null>(null)
   const hasLoaded = ref(false)
 
+  let catalogController = ref<AbortController | null>(null)
+
   async function loadCatalog() {
     if(isLoading.value  || hasLoaded.value) return
     isLoading.value = true
     error.value = null
 
+    const controller = new AbortController();
+    catalogController.value = controller;
+
     try{
         const [productsData, categoriesData] = await Promise.all([
-            getProducts(),
-            getCategories()
+            getProducts(controller.signal),
+            getCategories(controller.signal)
         ])
         products.value = productsData
         categories.value = categoriesData
+
+        if(controller.signal.aborted) return
+
         hasLoaded.value = true
-    } catch (err) {
+    } catch(err) {
+        if(controller.signal.aborted) {
+          console.log('Catalog request cancelled:', err)
+          return
+        }
         error.value = 'Failed to load products'
     } finally {
-        isLoading.value = false
+        if(catalogController.value === controller){
+          catalogController.value = null
+          isLoading.value = false
+        }
     }
+  }
+
+  function cancelCatalogController(){
+    catalogController.value?.abort()
   }
 
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
@@ -78,6 +97,7 @@ export const useProductStore = defineStore('product', () => {
     categories,
     searchQuery,
     loadCatalog,
+    cancelCatalogController,
     filteredProducts,
     groupedProducts,
     isLoading,
