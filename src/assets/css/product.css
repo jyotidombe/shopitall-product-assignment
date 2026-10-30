@@ -87,6 +87,20 @@
   white-space: nowrap;
 }
 
+.already-viewed-label{
+  position: absolute;
+  top:0;
+  left: 10px;
+  display: inline-block;
+  background-color: #e8f3e9;
+  color: #256b3b;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+
 @media (max-width: 700px) {
   .product-image {
     height: 190px;

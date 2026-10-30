@@ -1,38 +1,67 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { watch, onMounted, ref } from 'vue'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { getProductById } from '../services/productService'
 import type { Product } from '../types/product'
+import { useProductStore } from '../store/productStore'
 
-const route = useRoute()
+const productStore = useProductStore();
 
-const product = ref<Product | null>(null)
-const isLoading = ref(true)
-const error = ref<string | null>(null)
+const route = useRoute();
+const router = useRouter();
 
-const productId = computed(() => Number(route.params.id))
-//console.log('Current route:', route.fullPath)
-//console.log('All params:', route.params)
-//console.log('Product ID:', route.params.id)
+const product = ref<Product | null>(null);
+const isLoading = ref(false);
+const error = ref<string | null>(null);
 
-onMounted(async () => {
-  try {
-    if (
-      !Number.isInteger(productId.value) ||
-      productId.value < 1
-    ) {
-      throw new Error('Invalid product ID')
+async function loadProduct(){
+  product.value = null;
+  isLoading.value = true;
+  error.value = null;
+
+  try{
+    const id = Number(route.params.id)
+
+    if(!Number.isSafeInteger(id) || id < 0){
+      await router.replace('/')
+      return
     }
 
-    product.value = await getProductById(productId.value)
-    console.log('Fetched product:', product.value)
-  } catch {
+    const result = await getProductById(id);
+
+    if (!result) {
+      await router.replace('/')
+      return
+    }
+
+    product.value = result
+    productStore.markAsVisited(result.id)
+  }
+  
+  catch (err) {
+    console.error('Failed to load product:', err)
+
+    if (err instanceof Error) {
+      if (
+        err.message === 'PRODUCT_NOT_FOUND' ||
+        err.message === 'EMPTY_RESPONSE'
+      ) {
+        await router.replace('/')
+        return
+      }
+    }
+
     error.value =
-      'We could not find this product. Please return to the catalogue.'
-  } finally {
+      'Unable to load this product. Please try again.'
+  }
+ finally {
     isLoading.value = false
   }
-})
+};
+
+onMounted(loadProduct);
+
+watch(() => route.params.id, loadProduct)
 </script>
 
 <template>

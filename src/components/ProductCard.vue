@@ -17,6 +17,7 @@ defineProps<{
     :aria-label="`View ${product.title}`"
   >
     <div class="product-image">
+      <p v-if="product.isVisited" class="already-viewed-label">Alerady Viewed</p>
       <img
         :src="product.image"
         :alt="product.title"

@@ -1,23 +1,26 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import CatalogView from '../views/CatalogView.vue'
-import ProductDetailView from '../views/ProductDetailView.vue'
-import FavoriteView from '../views/FavoriteView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import ProductDetailView from '../views/ProductDetailView.vue';
+import FavoriteView from '../views/FavoriteView.vue';
 
 const routes = [
     {
         path: '/',
         name: 'Catalog',
-        component: CatalogView
+        component: () => import('../views/CatalogView.vue')
     },
     {
         path: '/products/:id',
         name: 'ProductDetail',
-        component: ProductDetailView
+        component: ProductDetailView,
     },
     {
         path: '/favorite',
         name: 'Favorite',
         component: FavoriteView
+    },
+    {
+        path:'/:pathMatch(.*)*',
+        redirect: '/',
     }
 ]
 
